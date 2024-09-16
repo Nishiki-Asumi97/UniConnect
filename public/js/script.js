@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+  FAQModule.init();
+
   initMap();
   getEvents();
   getCategories();
@@ -828,3 +831,50 @@ async function initMapPlaceUpdate() {
     location.setAttribute("longitude", place.geometry.location.lng());
   });
 }
+
+// FAQ module ==========================================================
+
+const FAQModule = (function () {
+  function submitFAQForm() {
+    const submitButton = document.getElementById('submitButton');
+
+    submitButton.addEventListener('click', function (event) {
+      event.preventDefault();
+
+      const question = document.getElementById('question').value;
+      const answer = document.getElementById('answer').value;
+
+      if (!question || !answer) {
+        alert("Both Question and Answer are required!");
+        return;
+      }
+
+      // Data to be sent
+      const formData = { question, answer };
+
+      // Send the data to the backend
+      fetch('/FAQ/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert('FAQ added successfully!');
+          document.getElementById('question').value = '';
+          document.getElementById('answer').value = '';
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  }
+
+  return {
+    init: submitFAQForm
+  };
+})();
