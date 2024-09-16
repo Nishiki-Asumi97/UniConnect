@@ -19,12 +19,20 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'eventManagement.html'));
 });
 
+app.get('/FAQ', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'faqPageAdmin.html'));
+});
+
 // Routes
 const categoryRoutes = require('./routes/categoryRoutes');
 app.use('/', categoryRoutes);
 
 const eventRoutes = require('./routes/eventRoutes');
 app.use('/', eventRoutes);
+
+//FAQ route=============================================
+const FAQRoutes = require('./routes/FAQRoutes');
+app.use('/FAQ', FAQRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
