@@ -891,7 +891,8 @@ const FAQModule = (function () {
         }
 
         data.data.forEach(faq => {
-          const listItem = document.createElement('li');
+          const listItem = document.createElement('tr');
+          listItem.id = `category-row-${faq._id}`;
           listItem.classList.add('collection-item');
           listItem.innerHTML = `
           <td id="category-name-${faq._id}">${faq.question} - ${faq.answer}</td>
@@ -901,21 +902,62 @@ const FAQModule = (function () {
               </button>
           </td>
           <td>
-              <button class="waves-effect waves-light btn red" id="deleteBtnFAQ">
+              <button class="waves-effect waves-light btn red deleteBtnFAQ" onclick="deleteFAQ('${faq._id}')" data-id="${faq._id}">
               DELETE
               </button>
           </td>
           `
           faqContainer.appendChild(listItem);
         });
+        // Initialize delete button functionality
+        initializeDeleteButtons();
       })
       .catch(error => console.error('Error fetching FAQs:', error));
+  }
+
+  // Function to delete FAQ based on its ID
+  function deleteFAQ(faqId) {
+    // Confirm deletion before proceeding
+    const confirmDelete = confirm('Are you sure you want to delete this FAQ?');
+    
+    if (!confirmDelete) {
+      return; // If the user cancels, do nothing
+    }
+
+    // Send DELETE request to the backend
+    fetch(`/FAQ/delete/${faqId}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        alert('FAQ deleted successfully!');
+        // Remove the deleted FAQ from the DOM
+        document.getElementById(`category-name-${faqId}`).parentElement.remove();
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  }
+
+  // Initialize delete buttons event listeners
+  function initializeDeleteButtons() {
+    const deleteButtons = document.querySelectorAll('.deleteBtnFAQ');
+
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const faqId = this.getAttribute('data-id');
+        deleteFAQ(faqId);
+      });
+    });
   }
 
   viewFAQList();
 
   return {
     submitFAQ,
-    viewFAQList
+    viewFAQList,
+    deleteFAQ
   };
 })();
