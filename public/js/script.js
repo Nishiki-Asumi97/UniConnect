@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  FAQModule.init();
+  FAQModule.submitFAQ();
 
   initMap();
   getEvents();
@@ -835,7 +835,9 @@ async function initMapPlaceUpdate() {
 // FAQ module ==========================================================
 
 const FAQModule = (function () {
-  function submitFAQForm() {
+
+  //create FAQ
+  function submitFAQ() {
     const submitButton = document.getElementById('submitButton');
 
     submitButton.addEventListener('click', function (event) {
@@ -868,13 +870,52 @@ const FAQModule = (function () {
           alert('FAQ added successfully!');
           document.getElementById('question').value = '';
           document.getElementById('answer').value = '';
+          viewFAQList();
         }
       })
       .catch(error => console.error('Error:', error));
     });
   }
 
+  // Function to view FAQ list
+  function viewFAQList() {
+    fetch('/FAQ/list')
+      .then(response => response.json())
+      .then(data => {
+        const faqContainer = document.getElementById('FAQList');
+        faqContainer.innerHTML = '';  // Clear the existing list
+
+        if (!data || !data.data || data.data.length === 0) {
+          faqContainer.innerHTML = '<li>No FAQs available</li>';
+          return;
+        }
+
+        data.data.forEach(faq => {
+          const listItem = document.createElement('li');
+          listItem.classList.add('collection-item');
+          listItem.innerHTML = `
+          <td id="category-name-${faq._id}">${faq.question} - ${faq.answer}</td>
+          <td>
+              <button class="waves-effect waves-light btn light-blue" id="editBtnFAQ">
+              EDIT
+              </button>
+          </td>
+          <td>
+              <button class="waves-effect waves-light btn red" id="deleteBtnFAQ">
+              DELETE
+              </button>
+          </td>
+          `
+          faqContainer.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Error fetching FAQs:', error));
+  }
+
+  viewFAQList();
+
   return {
-    init: submitFAQForm
+    submitFAQ,
+    viewFAQList
   };
 })();

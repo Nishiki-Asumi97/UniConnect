@@ -3,6 +3,7 @@ const FAQ = require("../models/FAQ");
 
 const router = express.Router();
 
+//create FAQ
 router.post("/create", async (req, res) => {
   const { question, answer } = req.body;
     console.log("submit ekat awa");
@@ -10,7 +11,7 @@ router.post("/create", async (req, res) => {
     if (!question || !answer) {
       return res.status(400).json({ error: 'Both Question and Answer are required!' });
     }
-    
+
     try {
       // Create and save the new FAQ entry
       const newFAQ = new FAQ({ question, answer });
@@ -24,5 +25,14 @@ router.post("/create", async (req, res) => {
       return res.status(500).json({ error: 'Server error' });
     }
 })
+
+router.get('/list', async (req, res) => {
+  try {
+    const faqs = await FAQ.find({});
+    res.status(200).json({ data: faqs });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch FAQs' });
+  }
+});
 
 module.exports = router;
