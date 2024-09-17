@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
   FAQModule.submitFAQ();
 
   FAQUserModule.viewFAQListUser();
+  FAQModule.showEditForm();
+  FAQModule.closeModal();
+  FAQModule.submitEditFAQ();
 
   initMap();
   getEvents();
@@ -879,43 +882,169 @@ const FAQModule = (function () {
     });
   }
 
+    // Function to submit the edit form and call the Edit API
+  function submitEditFAQ() {
+    console.log("api eka athulkata enawa")
+    const id = document.getElementById('editFAQId').value;
+    console.log("meka thmai frontend eke id eka" +id );
+    const newQuestion = document.getElementById('editFAQQuestion').value;
+    const newAnswer = document.getElementById('editFAQAnswer').value;
+
+
+
+    // Send the PUT request to the edit API
+    fetch('FAQ/edit', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: id, // The FAQ's ID
+        newQuestion: newQuestion,
+        newAnswer: newAnswer
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        alert('FAQ updated successfully!');
+        document.getElementById(`category-name-${id}`).innerText = `${newQuestion} - ${newAnswer}`;
+          
+      // Update the FAQ directly in the list without page reload
+      const faqRow = document.getElementById(`category-name-${id}`);
+      faqRow.innerHTML = `${newQuestion} - ${newAnswer}`;
+
+      // Hide the modal after saving changes
+      document.getElementById('editFAQModal').style.display = 'none';
+
+      // Show the Edit and Delete buttons again
+      const buttons = document.querySelectorAll('.editBtnFAQ, .deleteBtnFAQ');
+      buttons.forEach(button => {
+        button.style.display = 'inline-block'; // Show the buttons again
+      });
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  }
+    
+
   // Function to view FAQ list
   function viewFAQList() {
+        
     fetch('/FAQ/list')
-      .then(response => response.json())
-      .then(data => {
-        const faqContainer = document.getElementById('FAQList');
-        faqContainer.innerHTML = '';  // Clear the existing list
+    .then(response => response.json())
+    .then(data => {
+       const faqContainer = document.getElementById('FAQList');
+       faqContainer.innerHTML = '';  // Clear the existing list
 
-        if (!data || !data.data || data.data.length === 0) {
-          faqContainer.innerHTML = '<li>No FAQs available</li>';
-          return;
-        }
+            if (!data || !data.data || data.data.length === 0) {
+              faqContainer.innerHTML = '<li>No FAQs available</li>';
+              return;
+            }
 
-        data.data.forEach(faq => {
-          const listItem = document.createElement('tr');
-          listItem.id = `category-row-${faq._id}`;
-          listItem.classList.add('collection-item');
-          listItem.innerHTML = `
-          <td id="category-name-${faq._id}">${faq.question} - ${faq.answer}</td>
-          <td>
-              <button class="waves-effect waves-light btn light-blue" id="editBtnFAQ">
-              EDIT
-              </button>
-          </td>
-          <td>
-              <button class="waves-effect waves-light btn red deleteBtnFAQ" onclick="deleteFAQ('${faq._id}')" data-id="${faq._id}">
-              DELETE
-              </button>
-          </td>
-          `
-          faqContainer.appendChild(listItem);
-        });
-        // Initialize delete button functionality
-        initializeDeleteButtons();
-      })
-      .catch(error => console.error('Error fetching FAQs:', error));
+            const table = document.createElement('table');
+        table.style.width = '100%';
+        table.style.borderCollapse = 'collapse';
+        table.style.marginBottom = '20px';
+
+
+              data.data.forEach(faq => {
+                const listItem = document.createElement('tr');
+            listItem.id = `category-row-${faq._id}`;
+            listItem.classList.add('collection-item');
+            listItem.innerHTML = `
+                <td id="category-name-${faq._id}">${faq.question} - ${faq.answer}</td>
+                <td>
+                <button class="waves-effect waves-light btn light-blue editBtnFAQ" onclick="showEditForm('${faq._id}','${faq.question}','${faq.answer}')" faq-id="${faq._id}" que-id="${faq.question}" ans-id="${faq.answer}">
+                  EDIT
+                </button>
+                
+                <!-- Edit FAQ Modal with inline CSS -->
+                <div id="editFAQModal" style="
+                  display: none;
+                  position: fixed;
+                  z-index: 1;
+                  left: 0;
+                  top: 0;
+                  width: 100%;
+                  height: 100%;
+                  overflow: auto;
+                  background-color: rgba(0, 0, 0, 0.4);
+                ">
+                  <div class="modal-content" style="
+                    background-color: #f0f8ff;
+                    margin: 15% auto;
+                    padding: 20px;
+                    border: 2px solid #add8e6;
+                    width: 30%;
+                    border-radius: 10px;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                  ">
+                    <h3 style="
+                      color: #0077b6;
+                      font-weight: bold;
+                      text-align: center;
+                      margin-bottom: 20px;
+                    ">Edit FAQ</h3>
+                    <input type="hidden" id="editFAQId">
+                    <div style="margin-bottom: 15px;">
+                      <label for="editFAQQuestion" style="display: block; margin-bottom: 5px;">Question</label>
+                      <input type="text" id="editFAQQuestion" style="
+                        width: 100%;
+                        padding: 5px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                      ">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                      <label for="editFAQAnswer" style="display: block; margin-bottom: 5px;">Answer</label>
+                      <input type="text" id="editFAQAnswer" style="
+                        width: 100%;
+                        padding: 5px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                      ">
+                    </div>
+                    <div style="
+                      text-align: center;
+                      padding: 10px;
+                    ">
+                      <button class="waves-effect waves-light btn light-blue editBtnFAQsave" onclick="submitEditFAQ()">
+                        Save Changes
+                      </button>
+                      <button class="waves-effect waves-light btn red editBtnFAQcancel" onclick="
+                        document.getElementById('editFAQModal').style.display = 'none';
+                        window.location.href = 'http://localhost:3000/FAQ';
+                      ">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                
+                </td>
+              <td>
+              <td>
+                <button class="waves-effect waves-light btn red deleteBtnFAQ" onclick="deleteFAQ('${faq._id}')" data-id="${faq._id}">
+                 DELETE
+                </button>
+                </td>
+                `
+            faqContainer.appendChild(listItem);
+                
+                
+            });
+
+            // Initialize delete button functionality
+            initializeDeleteButtons();
+            initializeEditButtons();
+            })
+      .catch(error => console.error('Error fetching FAQs:', error));    
   }
+
 
   // Function to delete FAQ based on its ID
   function deleteFAQ(faqId) {
@@ -943,6 +1072,30 @@ const FAQModule = (function () {
     .catch(error => console.error('Error:', error));
   }
 
+  function showEditForm(id, question, answer){
+    console.log("edit form ekata enawa");
+    const modal = document.getElementById('editFAQModal');
+    modal.style.display = 'block'; // Show the modal
+    document.getElementById('editFAQId').value = id;
+    document.getElementById('editFAQQuestion').value = question;
+    document.getElementById('editFAQAnswer').value = answer;
+
+    console.log("edit form ekata eddi id eka: ",question  )
+
+    // Hide the Edit and Delete buttons
+    const buttons = document.querySelectorAll('.editBtnFAQ, .deleteBtnFAQ');
+    buttons.forEach(button => {
+      button.style.display = 'none'; // Hide all Edit and Delete buttons
+    });
+
+    // Register the save event listener
+    const saveButton = document.querySelector('.editBtnFAQsave');
+    saveButton.onclick = function () {
+      submitEditFAQ();
+    };
+    
+  }
+
   // Initialize delete buttons event listeners
   function initializeDeleteButtons() {
     const deleteButtons = document.querySelectorAll('.deleteBtnFAQ');
@@ -955,35 +1108,19 @@ const FAQModule = (function () {
     });
   }
 
-  // //Display the FAQ list to the user
-  // function viewFAQListUser() {
-  //   fetch('/FAQ/User/list')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       const faqContainer = document.getElementById('ViewFAQList');
-  //       faqContainer.innerHTML = '';  // Clear the existing list
-  
-  //       if (!data || !data.data || data.data.length === 0) {
-  //         faqContainer.innerHTML = '<p>No FAQs available</p>';
-  //         return;
-  //       }
-  
-  //       data.data.forEach(faq => {
-  //         // Create a card element for each FAQ
-  //         const card = document.createElement('div');
-  //         card.classList.add('card');
-  //         card.innerHTML = `
-  //           <div class="card-content">
-  //             <span class="card-title">${faq.question}</span>
-  //             <p>${faq.answer}</p>
-  //           </div>
-  //         `;
-  
-  //         faqContainer.appendChild(card);
-  //       });
-  //     })
-  //     .catch(error => console.error('Error fetching FAQs:', error));
-  // }
+  function initializeEditButtons(){
+    const editButtons = document.querySelectorAll('.editBtnFAQ');
+    editButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      const faqId = this.getAttribute('faq-id');
+      const que = this.getAttribute('que-id');
+      const ans = this.getAttribute('ans-id');
+
+      console.log(faqId)
+      showEditForm(faqId,que,ans);
+    });
+    });
+  }
 
   viewFAQList();
 
@@ -991,7 +1128,8 @@ const FAQModule = (function () {
     submitFAQ,
     viewFAQList,
     deleteFAQ,
-    //viewFAQListUser
+    showEditForm,
+    submitEditFAQ
   };
 })();
 
