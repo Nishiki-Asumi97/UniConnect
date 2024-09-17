@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post and Display Cards Demo</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- New Post Form -->
+    <div class="new-post-form">
+      <h3>Create a New Post</h3>
+      <form id="postForm">
+        <input type="text" id="postHeading" placeholder="Enter a heading" required><br>
+        <textarea id="postContent" rows="4" placeholder="Write your post content..." required></textarea><br>
+        <input type="file" id="imageUpload" accept="image/*"><br>
+        <button type="submit">Post</button>
+      </form>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search posts..." />
+    </div>
+
+    <!-- Posts Container -->
+    <div id="postsContainer">
+      <!-- Posts will be displayed here as cards -->
+    </div>
+  </div>
+
+  <!-- Centered Popup Notification -->
+  <div id="popupMessage" class="popup hidden">
+    <p>🎉 Your post has been successfully created!</p>
+  </div>
+
+  <script>
+    const postsContainer = document.getElementById('postsContainer');
+    const postForm = document.getElementById('postForm');
+    const searchInput = document.getElementById('searchInput');
+    const popupMessage = document.getElementById('popupMessage');
+
+    let allPosts = [];
+
+    // Load posts from server
+    function loadPosts() {
+      fetch('/api/posts')
+        .then(res => res.json())
+        .then(posts => {
+          allPosts = posts;
+          displayPosts(posts);
+        });
+    }
+
+    // Display posts based on the given list
+    function displayPosts(posts) {
+      postsContainer.innerHTML = '';
+      posts.forEach(post => {
+        createPostElement(post);
+      });
+    }
+
+    // Create and display a new post element
+    function createPostElement(post) {
+      const postCard = document.createElement('div');
+      postCard.className = 'post';
+      postCard.innerHTML = `
+        <h4>${post.heading}</h4>
+        <p>${post.content.slice(0, 100)}...</p>
+        ${post.image ? `<img src="${post.image}" alt="Post Image">` : ''}
+        <div class="interaction-buttons">
+          <button onclick="likePost('${post._id}')">Like (${post.likes})</button>
+        </div>
+      `;
+      postsContainer.appendChild(postCard);
+    }
+
+    // Like a post
+    function likePost(id) {
+      fetch(`/api/posts/${id}/like`, { method: 'POST' })
+        .then(res => res.json())
+        .then(updatedPost => {
+          loadPosts();
+        });
+    }
+
+    // Filter posts based on search input
+    function filterPosts(query) {
+      const filteredPosts = allPosts.filter(post => 
+        post.heading.toLowerCase().includes(query.toLowerCase()) ||
+        post.content.toLowerCase().includes(query.toLowerCase())
+      );
+      displayPosts(filteredPosts);
+    }
+
+    // Handle search input
+    searchInput.addEventListener('input', function () {
+      filterPosts(searchInput.value);
+    });
+
+    // Display centered popup message
+    function showPopupMessage() {
+      popupMessage.classList.remove('hidden');
+      setTimeout(() => {
+        popupMessage.classList.add('hidden');
+      }, 2500); // Hide after 2.5 seconds
+    }
+
+    // Handle new post submission
+    postForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const heading = document.getElementById('postHeading').value;
+      const content = document.getElementById('postContent').value;
+      const imageUpload = document.getElementById('imageUpload').files[0];
+
+      const formData = new FormData();
+      formData.append('heading', heading);
+      formData.append('content', content);
+      if (imageUpload) formData.append('image', imageUpload);
+
+      fetch('/api/posts', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(res => res.json())
+        .then(newPost => {
+          allPosts.push(newPost);
+          displayPosts(allPosts);
+          postForm.reset();
+          showPopupMessage();  // Show popup when post is successfully created
+        });
+    });
+
+    // Load posts when the page loads
+    loadPosts();
+  </script>
+
+</body>
+</html>
