@@ -23,6 +23,10 @@ app.get('/FAQ', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'faqPageAdmin.html'));
 });
 
+app.get('/FAQ/User', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'faqPageUser.html'));
+});
+
 // Routes
 const categoryRoutes = require('./routes/categoryRoutes');
 app.use('/', categoryRoutes);
