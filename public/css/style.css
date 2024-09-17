@@ -278,6 +278,10 @@ h5 {
 .faq-admin-page .card-panel {
     padding: 40px;
 }
+
+.faq-admin-page .card-panel-list {
+    padding: 40px;
+}
   
 .faq-admin-page .input-field {
     margin-bottom: 40px;
@@ -297,5 +301,9 @@ h5 {
 
 .faq-admin-page .btn-large{
     color: white;
+}
+
+.faq-admin-page .faqcontainer{
+    color: black;
 }
   
