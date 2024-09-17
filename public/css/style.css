@@ -306,4 +306,37 @@ h5 {
 .faq-admin-page .faqcontainer{
     color: black;
 }
+
+.faq-user-page .chat-container {
+  margin-top: 50px;
+  height: 500px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.faq-user-page .chat-messages {
+  padding-left: 10px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background: #f9f9f9;
+}
+
+.faq-user-page .chat-input {
+  display: flex;
+  padding-left: 10px;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+.faq-user-page .chat-input input {
+  flex: 1;
+  margin-right: 10px;
+}
+
   

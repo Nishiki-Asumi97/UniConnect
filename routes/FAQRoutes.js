@@ -46,4 +46,10 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+//FAQ User Routes ===============================
+
+
+
+
+
 module.exports = router;
