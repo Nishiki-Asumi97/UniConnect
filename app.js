@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser'); 
+const FAQRoutes = require('./routes/FAQRoutes');
+const FAQUserRoutes = require('./routes/FAQUserRoutes');
 
 const app = express();
 
@@ -35,8 +37,10 @@ const eventRoutes = require('./routes/eventRoutes');
 app.use('/', eventRoutes);
 
 //FAQ route=============================================
-const FAQRoutes = require('./routes/FAQRoutes');
 app.use('/FAQ', FAQRoutes);
+
+//FAQ User route=============================================
+app.use('/FAQ/User', FAQUserRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

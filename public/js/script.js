@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   FAQModule.submitFAQ();
 
+  FAQUserModule.viewFAQListUser();
+
   initMap();
   getEvents();
   getCategories();
@@ -953,11 +955,81 @@ const FAQModule = (function () {
     });
   }
 
+  // //Display the FAQ list to the user
+  // function viewFAQListUser() {
+  //   fetch('/FAQ/User/list')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       const faqContainer = document.getElementById('ViewFAQList');
+  //       faqContainer.innerHTML = '';  // Clear the existing list
+  
+  //       if (!data || !data.data || data.data.length === 0) {
+  //         faqContainer.innerHTML = '<p>No FAQs available</p>';
+  //         return;
+  //       }
+  
+  //       data.data.forEach(faq => {
+  //         // Create a card element for each FAQ
+  //         const card = document.createElement('div');
+  //         card.classList.add('card');
+  //         card.innerHTML = `
+  //           <div class="card-content">
+  //             <span class="card-title">${faq.question}</span>
+  //             <p>${faq.answer}</p>
+  //           </div>
+  //         `;
+  
+  //         faqContainer.appendChild(card);
+  //       });
+  //     })
+  //     .catch(error => console.error('Error fetching FAQs:', error));
+  // }
+
   viewFAQList();
 
   return {
     submitFAQ,
     viewFAQList,
-    deleteFAQ
+    deleteFAQ,
+    //viewFAQListUser
+  };
+})();
+
+const FAQUserModule = (function (){
+
+  //Display the FAQ list to the user
+  function viewFAQListUser() {
+    fetch('/FAQ/User/list')
+      .then(response => response.json())
+      .then(data => {
+        const faqContainer = document.getElementById('ViewFAQList');
+        faqContainer.innerHTML = '';  // Clear the existing list
+  
+        if (!data || !data.data || data.data.length === 0) {
+          faqContainer.innerHTML = '<p>No FAQs available</p>';
+          return;
+        }
+  
+        data.data.forEach(faq => {
+          // Create a card element for each FAQ
+          const card = document.createElement('div');
+          card.classList.add('card');
+          card.innerHTML = `
+            <div class="faq-user-page card-content">
+              <span class="faq-user-page card-title">${faq.question}</span>
+              <p>${faq.answer}</p>
+            </div>
+          `;
+  
+          faqContainer.appendChild(card);
+        });
+      })
+      .catch(error => console.error('Error fetching FAQs:', error));
+  }
+
+  viewFAQListUser();
+
+  return {
+    viewFAQListUser
   };
 })();

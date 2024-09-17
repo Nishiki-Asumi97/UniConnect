@@ -307,6 +307,8 @@ h5 {
     color: black;
 }
 
+/* FAQ user page styles */
+
 .faq-user-page .chat-container {
   margin-top: 50px;
   height: 500px;
@@ -338,5 +340,74 @@ h5 {
   flex: 1;
   margin-right: 10px;
 }
+
+.faq-user-page .faq-container-user {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+  
+.faq-user-page .card {
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 300px;
+    background-color: #fff;
+}
+  
+.faq-user-page .card-content {
+    padding: 10px;
+}
+  
+.faq-user-page .card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.faq-user-page .faq-container {
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px; */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center content horizontally */
+    gap: 20px; /* Add spacing between cards */
+    padding: 20px;
+}
+  
+.card {
+    /* margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 300px;
+    background-color: #fff; */
+    flex: 0 1 calc(50% - 20px); /* Adjust width to be half of the container */
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #a1defb;
+}
+  
+.faq-user-page .card-content {
+    padding: 10px;
+}
+  
+.faq-user-page .card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Media query to ensure proper display on smaller screens */
+@media (max-width: 768px) {
+    .card {
+      flex: 0 1 calc(100% - 20px); /* Stack cards in one column on small screens */
+    }
+  }
+  
 
   
