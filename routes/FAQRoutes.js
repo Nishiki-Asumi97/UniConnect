@@ -6,7 +6,6 @@ const router = express.Router();
 //create FAQ
 router.post("/create", async (req, res) => {
   const { question, answer } = req.body;
-    console.log("submit ekat awa");
     // Validate the data
     if (!question || !answer) {
       return res.status(400).json({ error: 'Both Question and Answer are required!' });
@@ -26,12 +25,24 @@ router.post("/create", async (req, res) => {
     }
 })
 
+//View FAQ
 router.get('/list', async (req, res) => {
   try {
     const faqs = await FAQ.find({});
     res.status(200).json({ data: faqs });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch FAQs' });
+  }
+});
+
+//Delete FAQ
+router.delete("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await FAQ.findByIdAndDelete(id);
+    res.status(200).json({message : "FAQ successfully Deleted"})  
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 
