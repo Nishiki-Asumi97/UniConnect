@@ -1,0 +1,82 @@
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <header class="bg-white border-b-4 border-gray-200">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <nav class="flex space-x-6">
+                <a href="#" class="text-cyan-500 font-bold">Home</a>
+                <a href="#" class="text-gray-500">Events</a>
+                <a href="#" class="text-gray-500">Communities</a>
+                <a href="#" class="text-gray-500">FAQ</a>
+            </nav>
+            <a href="#" class="text-cyan-500 text-2xl"><i class="fas fa-user-circle"></i> Profile</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto my-8 px-6">
+        <div class="flex justify-center mb-8">
+            <img src="https://placehold.co/850x300" alt="A group of people at an event booth with a university banner" class="rounded-xl w-full h-64 object-cover"/>
+        </div>
+        <div class="text-center mb-8">
+            <button class="bg-cyan-500 text-white py-2 px-4 rounded-full">Explore Events Around You</button>
+        </div>
+
+        <section>
+            <h2 class="text-center text-xl font-bold text-gray-700 mb-5">Upcoming Events</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white border rounded-lg overflow-hidden shadow-md">
+                    <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold">09 - 27</p>
+                            <p class="text-lg">SEP</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">NAIDOC 2024: The Fire Within exhibition</h3>
+                        <p class="text-sm text-gray-600 mb-2">Mon, 05:00 PM - Wed, 03:00 PM</p>
+                        <p class="text-sm text-gray-600 mb-4">Geelong Waterfront Campus</p>
+                    </div>
+                </div>
+                <div class="bg-white border rounded-lg overflow-hidden shadow-md">
+                    <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold">15</p>
+                            <p class="text-lg">JUL</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Honours Thesis Writing Group - Faculty of Health</h3>
+                        <p class="text-sm text-gray-600 mb-2">Fri, 02:00 PM - 03:00 PM</p>
+                        <p class="text-sm text-gray-600 mb-4">Online</p>
+                    </div>
+                </div>
+                <div class="bg-white border rounded-lg overflow-hidden shadow-md">
+                    <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold">15 - 23</p>
+                            <p class="text-lg">JUL</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Honours Thesis Writing Group - Faculty of Arts and Education</h3>
+                        <p class="text-sm text-gray-600 mb-2">Sat, 02:00 PM - 03:00 PM</p>
+                        <p class="text-sm text-gray-600 mb-4">Online</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
