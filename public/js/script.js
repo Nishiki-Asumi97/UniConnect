@@ -532,7 +532,7 @@ function viewEvent(event) {
       <i class="material-icons">assignment_ind</i><b>Organizer:</b>${event.organizerName
     } - ${event.organizerContact}</p>
       <p id="modal-location" class="modal-info">
-      <i class="material-icons">accessibility</i>${event.attendees
+      <i class="material-icons">accessibility</i>${selectedEventAttendees
     } Going to Attend</p>
       <p id="modal-details" class="modal-info">${event.details}</p>
      </div>
