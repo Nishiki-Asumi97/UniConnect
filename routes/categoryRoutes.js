@@ -31,7 +31,7 @@ router.post("/categories", async (req, res) => {
   const newCategory = new Category({ name });
   try {
     await newCategory.save();
-    res.redirect("/");
+    res.redirect("/Events");
   } catch (err) {
     res.status(500).send(err);
   }
@@ -42,11 +42,11 @@ router.delete("/categories/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const data = await Event.find({ categories: { $in: [id] } });
-    if(data.length > 0){
-      res.status(400).json({message : "This Category cannot be deleted since Associated with events."})
-    }else{
+    if (data.length > 0) {
+      res.status(400).json({ message: "This Category cannot be deleted since Associated with events." })
+    } else {
       await Category.findByIdAndDelete(id);
-      res.status(200).json({message : "Category Deleted"})  
+      res.status(200).json({ message: "Category Deleted" })
     }
   } catch (err) {
     res.status(500).send(err);

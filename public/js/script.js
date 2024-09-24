@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     try {
-      await fetch("/events", {
+      await fetch("Events/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -286,7 +286,7 @@ let oldCategoryValue = "";
 // GET categories
 async function getCategories() {
   try {
-    await fetch("/categories")
+    await fetch("Events/categories")
       .then((response) => response.json())
       .then((categories) => {
         showCategories(categories);
@@ -395,7 +395,7 @@ function validateCategory() {
 async function getEvents() {
   showSpinner();
   try {
-    await fetch("/events")
+    await fetch("Events/events")
       .then((response) => response.json())
       .then((events) => {
         setEventCardContainer(events);
@@ -409,7 +409,7 @@ async function getEvents() {
 async function getEventsByCategory(category) {
   try {
     showSpinner();
-    await fetch(`/events/category/${category}`)
+    await fetch(`Events/events/category/${category}`)
       .then((response) => response.json())
       .then((events) => {
         setEventCardContainer(events);
@@ -600,7 +600,7 @@ function viewEvent(event) {
 //Delete Event
 function deleteEvent(eventId) {
   if (confirm("Are you sure you want to delete this event?")) {
-    fetch(`/events/${eventId}`, {
+    fetch(`Events/events/${eventId}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -625,7 +625,7 @@ function deleteEvent(eventId) {
 
 //Update Event API Call
 function updateEvent(eventId, updatedEvent) {
-  fetch(`/events/${eventId}`, {
+  fetch(`Events/events/${eventId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -690,7 +690,7 @@ function updateRSVP(id) {
   }
 
   try {
-    fetch(`/events/rsvp/${id}`, {
+    fetch(`Events/events/rsvp/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -706,7 +706,7 @@ function updateRSVP(id) {
 async function deleteCategory(id) {
   if (confirm("Are you sure you want to delete this item?")) {
     try {
-      await fetch(`/categories/${id}`, {
+      await fetch(`Events/categories/${id}`, {
         method: "DELETE",
       }).then((response) => {
         if (response.ok) {
@@ -769,7 +769,7 @@ async function saveUpdateCategory(id) {
       cell.textContent = oldCategoryValue;
       return;
     } else {
-      await fetch(`/categories/${id}`, {
+      await fetch(`Events/categories/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
