@@ -28,9 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var modal = document.querySelectorAll(".modal");
   M.Modal.init(modal, {
     onCloseEnd: function (el) {
-      location.reload();
+      document.getElementById("event-details-view").style.display = "none";
+      document.getElementById("edit-event-form").style.display = "none";
+      document.getElementById("edit-event-btn").style.display = "none";
+      document.getElementById("delete-event-btn").style.display = "none";
+      document.getElementById("save-update-btn").style.display = "none";
     },
   });
+
 
   // Open side panel
   addCategoryBtn.addEventListener("click", () => {
@@ -538,6 +543,12 @@ function viewEvent(event) {
   const modalInstance = M.Modal.getInstance(modal);
   modalInstance.open();
 
+  document.getElementById("event-details-view").style.display = "block";
+  document.getElementById("edit-event-form").style.display = "none";
+  document.getElementById("edit-event-btn").style.display = "inline-block";
+  document.getElementById("delete-event-btn").style.display = "inline-block";
+  document.getElementById("save-update-btn").style.display = "none";
+
   const selectedCategories = event.categories;
   document.getElementById("edit-event-name").value = event.name;
   document.getElementById("edit-date").value = event.date.split("T")[0]; // Format the date properly
@@ -663,13 +674,28 @@ function populateSelect(data, select) {
 //RSVP Count Increase
 function updateRSVP(id) {
   const attendeesCount = document.getElementById(`attendees-count-${id}`);
+  const rsvpBtn = document.getElementById(`rsvp-btn-${id}`);
+
   let count = attendeesCount.textContent.split(" ")[0];
   let value = parseInt(count);
-  attendeesCount.textContent = `${value + 1} Going`;
+
+  let isIncreased = false;
+  if (rsvpBtn.innerText === 'RSVP') {
+    rsvpBtn.innerText = 'Going';
+    attendeesCount.textContent = `${value + 1} Going`;
+    isIncreased = true;
+  } else {
+    rsvpBtn.innerText = 'RSVP';
+    attendeesCount.textContent = `${value - 1} Going`;
+  }
 
   try {
     fetch(`/events/rsvp/${id}`, {
       method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "isIncreased": isIncreased })
     });
   } catch (err) {
     attendeesCount.textContent = `${value} Going`;
