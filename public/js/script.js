@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
 let markers = [];
 let currentInfoWindow = null;
 let selectedEventId = null;
-let selectedEventAttendess = 0;
+let selectedEventAttendees = 0;
 let map;
 let updatedBannerString = "";
 let existingCategories = [];
@@ -508,7 +508,7 @@ function viewEvent(event) {
   const modalTitle = document.getElementById("modal-title");
   const modalContent = document.getElementById("modal-content");
   selectedEventId = event._id;
-  selectedEventAttendess = event.attendees;
+  selectedEventAttendees = document.getElementById(`attendees-count-${selectedEventId}`).textContent.split(" ")[0];
 
   modalTitle.innerHTML = event.name;
   modalContent.innerHTML = `
