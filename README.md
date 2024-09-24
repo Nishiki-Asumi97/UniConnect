@@ -79,3 +79,8 @@ Make sure you have the following installed on your local machine:
    ```bash
    git clone https://github.com/Nishiki-Asumi97/UniConnect.git
    cd UniConnect
+2. Install Dependencies
+   npm install
+   
+4. Running the application
+   npm start
