@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventBtn.style.display = "none";
     sidePanelC.classList.add("open");
     document.getElementById('overlay').classList.add('visible');
+    document.querySelector('body').style.overflow = "hidden";
   });
 
   // Close side panel
@@ -61,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
     sidePanelE.classList.remove("open");
 
     document.getElementById('overlay').classList.remove('visible');
+    document.querySelector('body').style.overflow = "visible";
     categoryForm.reset();
   });
 
@@ -71,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventBtn.style.display = "inline-block";
     sidePanelE.classList.remove("open");
 
+    document.querySelector('body').style.overflow = "visible";
     document.getElementById('overlay').classList.remove('visible');
     eventAddForm.reset();
     imagePreview.src = "";
@@ -85,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventBtn.style.display = "none";
     sidePanelE.classList.add("open");
     document.getElementById('overlay').classList.add('visible');
+    document.querySelector('body').style.overflow = "hidden";
     getCategories();
     initMapPlace();
   });
@@ -95,6 +99,9 @@ document.addEventListener("DOMContentLoaded", function () {
     addCategoryBtn.style.display = "inline-block";
     addEventBtn.style.display = "inline-block";
     sidePanelE.classList.remove("open");
+
+    document.getElementById('overlay').classList.remove('visible');
+    document.querySelector('body').style.overflow = "visible";
 
     eventAddForm.reset();
     imagePreview.src = "";
@@ -250,10 +257,10 @@ document.addEventListener("DOMContentLoaded", function () {
       eventAddForm.reset();
       imagePreview.src = "";
       sidePanelE.classList.remove("open");
-
+      document.getElementById('overlay').classList.remove('visible');
       getEvents();
       setTimeout(() => {
-        location.reload();
+        window.location.reload();
       }, 1000);
     } catch (err) {
       M.toast({ html: "Event Adding Failed" });
