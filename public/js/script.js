@@ -1,12 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  FAQModule.submitFAQ();
-
-  FAQUserModule.viewFAQListUser();
-  FAQModule.showEditForm();
-  FAQModule.closeModal();
-  FAQModule.submitEditFAQ();
-
   initMap();
   getEvents();
   getCategories();
@@ -35,9 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var modal = document.querySelectorAll(".modal");
   M.Modal.init(modal, {
     onCloseEnd: function (el) {
-      location.reload();
+      document.getElementById("event-details-view").style.display = "none";
+      document.getElementById("edit-event-form").style.display = "none";
+      document.getElementById("edit-event-btn").style.display = "none";
+      document.getElementById("delete-event-btn").style.display = "none";
+      document.getElementById("save-update-btn").style.display = "none";
     },
   });
+
 
   // Open side panel
   addCategoryBtn.addEventListener("click", () => {
@@ -47,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventBtn.style.display = "none";
     sidePanelC.classList.add("open");
     document.getElementById('overlay').classList.add('visible');
+    document.querySelector('body').style.overflow = "hidden";
   });
 
   // Close side panel
@@ -61,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     sidePanelE.classList.remove("open");
 
     document.getElementById('overlay').classList.remove('visible');
+    document.querySelector('body').style.overflow = "visible";
     categoryForm.reset();
   });
 
@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventBtn.style.display = "inline-block";
     sidePanelE.classList.remove("open");
 
+    document.querySelector('body').style.overflow = "visible";
     document.getElementById('overlay').classList.remove('visible');
     eventAddForm.reset();
     imagePreview.src = "";
@@ -85,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventBtn.style.display = "none";
     sidePanelE.classList.add("open");
     document.getElementById('overlay').classList.add('visible');
+    document.querySelector('body').style.overflow = "hidden";
     getCategories();
     initMapPlace();
   });
@@ -95,6 +97,9 @@ document.addEventListener("DOMContentLoaded", function () {
     addCategoryBtn.style.display = "inline-block";
     addEventBtn.style.display = "inline-block";
     sidePanelE.classList.remove("open");
+
+    document.getElementById('overlay').classList.remove('visible');
+    document.querySelector('body').style.overflow = "visible";
 
     eventAddForm.reset();
     imagePreview.src = "";
@@ -195,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "location": {
           "address": location.value,
           "latitude": Number(location.getAttribute("latitude")),
-          "longitude": Number(location.getAttribute("longitude")),  
+          "longitude": Number(location.getAttribute("longitude")),
         },
         "timeStart": document.getElementById("edit-timeStart").value,
         "timeEnd": document.getElementById("edit-timeEnd").value,
@@ -217,8 +222,8 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
 
     const data =
-      // prettier-ignore
-      {
+    // prettier-ignore
+    {
       "name": document.getElementById("event-name").value,
       "details": document.getElementById("details").value,
       "date": new Date(document.getElementById("date").value),
@@ -238,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     try {
-      await fetch("/events", {
+      await fetch("Events/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -250,10 +255,10 @@ document.addEventListener("DOMContentLoaded", function () {
       eventAddForm.reset();
       imagePreview.src = "";
       sidePanelE.classList.remove("open");
-
+      document.getElementById('overlay').classList.remove('visible');
       getEvents();
       setTimeout(() => {
-        location.reload();
+        window.location.reload();
       }, 1000);
     } catch (err) {
       M.toast({ html: "Event Adding Failed" });
@@ -272,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
 let markers = [];
 let currentInfoWindow = null;
 let selectedEventId = null;
-let selectedEventAttendess = 0;
+let selectedEventAttendees = 0;
 let map;
 let updatedBannerString = "";
 let existingCategories = [];
@@ -281,7 +286,7 @@ let oldCategoryValue = "";
 // GET categories
 async function getCategories() {
   try {
-    await fetch("/categories")
+    await fetch("Events/categories")
       .then((response) => response.json())
       .then((categories) => {
         showCategories(categories);
@@ -390,7 +395,7 @@ function validateCategory() {
 async function getEvents() {
   showSpinner();
   try {
-    await fetch("/events")
+    await fetch("Events/events")
       .then((response) => response.json())
       .then((events) => {
         setEventCardContainer(events);
@@ -404,7 +409,7 @@ async function getEvents() {
 async function getEventsByCategory(category) {
   try {
     showSpinner();
-    await fetch(`/events/category/${category}`)
+    await fetch(`Events/events/category/${category}`)
       .then((response) => response.json())
       .then((events) => {
         setEventCardContainer(events);
@@ -438,9 +443,8 @@ function setEventCardContainer(events) {
 
     card.innerHTML = `
       <div class="card-image">
-        <img src="data:image/png;base64,${
-          event.banner
-        }" onerror="this.onerror=null; this.src='./img/img-noload.jpg';" alt="Event Image">
+        <img src="data:image/png;base64,${event.banner
+      }" onerror="this.onerror=null; this.src='./img/img-noload.jpg';" alt="Event Image">
         <span class="card-title">
           ${new Date(event.date).toDateString()} <br/> 
           ${event.timeStart} - ${event.timeEnd}
@@ -454,14 +458,12 @@ function setEventCardContainer(events) {
         <div class="row">
           <div class="col s1"><i class="material-icons icon-location">location_on</i></div>
           <div class="col s5">${event.location?.address}</div>
-          <div class="col s5">
+          <div class="col s4">
             <button class="waves-light btn" id="rsvp-btn-${event._id}" 
-                onclick="updateRSVP('${event._id}',${
-      event.attendees
-    })">RSVP</button>
-            <span id="attendees-count-${event._id}">${
-      event.attendees
-    } Going</span>
+                onclick="updateRSVP('${event._id}',${event.attendees
+      })">RSVP</button>
+            <span id="attendees-count-${event._id}">${event.attendees
+      } Going</span>
           </div>
           <div class="col s1">
           <button class="btn-flat view-event-btn"><i class="material-icons icon-view">visibility</i></button></div>
@@ -506,37 +508,32 @@ function viewEvent(event) {
   const modalTitle = document.getElementById("modal-title");
   const modalContent = document.getElementById("modal-content");
   selectedEventId = event._id;
-  selectedEventAttendess = event.attendees;
+  selectedEventAttendees = document.getElementById(`attendees-count-${selectedEventId}`).textContent.split(" ")[0];
 
   modalTitle.innerHTML = event.name;
   modalContent.innerHTML = `
     <div class="row">
      <div class="col s12 m6 l6">
-      <img id="modal-image" src="data:image/png;base64,${
-        event.banner
-      }" alt="Event Image" class="responsive-img modal-image">
+      <img id="modal-image" src="data:image/png;base64,${event.banner
+    }" alt="Event Image" class="responsive-img modal-image">
      </div>
      <div class="col s12 m6 l6">
       <p id="modal-date-time" class="modal-info">
       <i class="material-icons">event</i><b>Date:</b> ${new Date(
-        event.date
-      ).toDateString()}</p>
+      event.date
+    ).toDateString()}</p>
       <p id="modal-date-time" class="modal-info">
-      <i class="material-icons">timelapse</i><b>Time:</b> ${
-        event.timeStart
-      } - ${event.timeEnd}</p>
+      <i class="material-icons">timelapse</i><b>Time:</b> ${event.timeStart
+    } - ${event.timeEnd}</p>
       <p id="modal-location" class="modal-info">
-      <i class="material-icons">location_city</i><b>Location:</b> ${
-        event.location.address
-      }</p>
+      <i class="material-icons">location_city</i><b>Location:</b> ${event.location.address
+    }</p>
       <p id="modal-organizer" class="modal-info">
-      <i class="material-icons">assignment_ind</i><b>Organizer:</b>${
-        event.organizerName
-      } - ${event.organizerContact}</p>
+      <i class="material-icons">assignment_ind</i><b>Organizer:</b>${event.organizerName
+    } - ${event.organizerContact}</p>
       <p id="modal-location" class="modal-info">
-      <i class="material-icons">accessibility</i>${
-        event.attendees
-      } Going to Attend</p>
+      <i class="material-icons">accessibility</i>${selectedEventAttendees
+    } Going to Attend</p>
       <p id="modal-details" class="modal-info">${event.details}</p>
      </div>
     </div>
@@ -545,6 +542,12 @@ function viewEvent(event) {
   // Open the modal
   const modalInstance = M.Modal.getInstance(modal);
   modalInstance.open();
+
+  document.getElementById("event-details-view").style.display = "block";
+  document.getElementById("edit-event-form").style.display = "none";
+  document.getElementById("edit-event-btn").style.display = "inline-block";
+  document.getElementById("delete-event-btn").style.display = "inline-block";
+  document.getElementById("save-update-btn").style.display = "none";
 
   const selectedCategories = event.categories;
   document.getElementById("edit-event-name").value = event.name;
@@ -597,7 +600,7 @@ function viewEvent(event) {
 //Delete Event
 function deleteEvent(eventId) {
   if (confirm("Are you sure you want to delete this event?")) {
-    fetch(`/events/${eventId}`, {
+    fetch(`Events/events/${eventId}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -622,7 +625,7 @@ function deleteEvent(eventId) {
 
 //Update Event API Call
 function updateEvent(eventId, updatedEvent) {
-  fetch(`/events/${eventId}`, {
+  fetch(`Events/events/${eventId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -671,13 +674,28 @@ function populateSelect(data, select) {
 //RSVP Count Increase
 function updateRSVP(id) {
   const attendeesCount = document.getElementById(`attendees-count-${id}`);
+  const rsvpBtn = document.getElementById(`rsvp-btn-${id}`);
+
   let count = attendeesCount.textContent.split(" ")[0];
   let value = parseInt(count);
-  attendeesCount.textContent = `${value + 1} Going`;
+
+  let isIncreased = false;
+  if (rsvpBtn.innerText === 'RSVP') {
+    rsvpBtn.innerText = 'Going';
+    attendeesCount.textContent = `${value + 1} Going`;
+    isIncreased = true;
+  } else {
+    rsvpBtn.innerText = 'RSVP';
+    attendeesCount.textContent = `${value - 1} Going`;
+  }
 
   try {
-    fetch(`/events/rsvp/${id}`, {
+    fetch(`Events/events/rsvp/${id}`, {
       method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "isIncreased": isIncreased })
     });
   } catch (err) {
     attendeesCount.textContent = `${value} Going`;
@@ -688,7 +706,7 @@ function updateRSVP(id) {
 async function deleteCategory(id) {
   if (confirm("Are you sure you want to delete this item?")) {
     try {
-      await fetch(`/categories/${id}`, {
+      await fetch(`Events/categories/${id}`, {
         method: "DELETE",
       }).then((response) => {
         if (response.ok) {
@@ -750,8 +768,8 @@ async function saveUpdateCategory(id) {
       M.toast({ html: "This Category already exist", classes: "toast" });
       cell.textContent = oldCategoryValue;
       return;
-    }else{
-      await fetch(`/categories/${id}`, {
+    } else {
+      await fetch(`Events/categories/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -761,12 +779,12 @@ async function saveUpdateCategory(id) {
           { "name": newValue }
         ),
       })
-      .then((response) => {
-        if(response.ok){
-          M.toast({ html: "Category Updated" , classes:"toast"});
-          getCategories();
-        }
-      });
+        .then((response) => {
+          if (response.ok) {
+            M.toast({ html: "Category Updated", classes: "toast" });
+            getCategories();
+          }
+        });
     }
   } catch (err) {
     console.log();
@@ -839,6 +857,13 @@ async function initMapPlaceUpdate() {
 
 // FAQ module ==========================================================
 
+FAQModule.submitFAQ();
+
+FAQUserModule.viewFAQListUser();
+FAQModule.showEditForm();
+FAQModule.closeModal();
+FAQModule.submitEditFAQ();
+
 const FAQModule = (function () {
 
   //create FAQ
@@ -867,26 +892,26 @@ const FAQModule = (function () {
         },
         body: JSON.stringify(formData),
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          alert('FAQ added successfully!');
-          document.getElementById('question').value = '';
-          document.getElementById('answer').value = '';
-          viewFAQList();
-        }
-      })
-      .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert('FAQ added successfully!');
+            document.getElementById('question').value = '';
+            document.getElementById('answer').value = '';
+            viewFAQList();
+          }
+        })
+        .catch(error => console.error('Error:', error));
     });
   }
 
-    // Function to submit the edit form and call the Edit API
+  // Function to submit the edit form and call the Edit API
   function submitEditFAQ() {
     console.log("api eka athulkata enawa")
     const id = document.getElementById('editFAQId').value;
-    console.log("meka thmai frontend eke id eka" +id );
+    console.log("meka thmai frontend eke id eka" + id);
     const newQuestion = document.getElementById('editFAQQuestion').value;
     const newAnswer = document.getElementById('editFAQAnswer').value;
 
@@ -904,57 +929,57 @@ const FAQModule = (function () {
         newAnswer: newAnswer
       }),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) {
-        alert(data.error);
-      } else {
-        alert('FAQ updated successfully!');
-        document.getElementById(`category-name-${id}`).innerText = `${newQuestion} - ${newAnswer}`;
-          
-      // Update the FAQ directly in the list without page reload
-      const faqRow = document.getElementById(`category-name-${id}`);
-      faqRow.innerHTML = `${newQuestion} - ${newAnswer}`;
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert('FAQ updated successfully!');
+          document.getElementById(`category-name-${id}`).innerText = `${newQuestion} - ${newAnswer}`;
 
-      // Hide the modal after saving changes
-      document.getElementById('editFAQModal').style.display = 'none';
+          // Update the FAQ directly in the list without page reload
+          const faqRow = document.getElementById(`category-name-${id}`);
+          faqRow.innerHTML = `${newQuestion} - ${newAnswer}`;
 
-      // Show the Edit and Delete buttons again
-      const buttons = document.querySelectorAll('.editBtnFAQ, .deleteBtnFAQ');
-      buttons.forEach(button => {
-        button.style.display = 'inline-block'; // Show the buttons again
-      });
-      }
-    })
-    .catch(error => console.error('Error:', error));
+          // Hide the modal after saving changes
+          document.getElementById('editFAQModal').style.display = 'none';
+
+          // Show the Edit and Delete buttons again
+          const buttons = document.querySelectorAll('.editBtnFAQ, .deleteBtnFAQ');
+          buttons.forEach(button => {
+            button.style.display = 'inline-block'; // Show the buttons again
+          });
+        }
+      })
+      .catch(error => console.error('Error:', error));
   }
-    
+
 
   // Function to view FAQ list
   function viewFAQList() {
-        
+
     fetch('/FAQ/list')
-    .then(response => response.json())
-    .then(data => {
-       const faqContainer = document.getElementById('FAQList');
-       faqContainer.innerHTML = '';  // Clear the existing list
+      .then(response => response.json())
+      .then(data => {
+        const faqContainer = document.getElementById('FAQList');
+        faqContainer.innerHTML = '';  // Clear the existing list
 
-            if (!data || !data.data || data.data.length === 0) {
-              faqContainer.innerHTML = '<li>No FAQs available</li>';
-              return;
-            }
+        if (!data || !data.data || data.data.length === 0) {
+          faqContainer.innerHTML = '<li>No FAQs available</li>';
+          return;
+        }
 
-            const table = document.createElement('table');
+        const table = document.createElement('table');
         table.style.width = '100%';
         table.style.borderCollapse = 'collapse';
         table.style.marginBottom = '20px';
 
 
-              data.data.forEach(faq => {
-                const listItem = document.createElement('tr');
-            listItem.id = `category-row-${faq._id}`;
-            listItem.classList.add('collection-item');
-            listItem.innerHTML = `
+        data.data.forEach(faq => {
+          const listItem = document.createElement('tr');
+          listItem.id = `category-row-${faq._id}`;
+          listItem.classList.add('collection-item');
+          listItem.innerHTML = `
                 <td id="category-name-${faq._id}">${faq.question} - ${faq.answer}</td>
                 <td>
                 <button class="waves-effect waves-light btn light-blue editBtnFAQ" onclick="showEditForm('${faq._id}','${faq.question}','${faq.answer}')" faq-id="${faq._id}" que-id="${faq.question}" ans-id="${faq.answer}">
@@ -1033,16 +1058,16 @@ const FAQModule = (function () {
                 </button>
                 </td>
                 `
-            faqContainer.appendChild(listItem);
-                
-                
-            });
+          faqContainer.appendChild(listItem);
 
-            // Initialize delete button functionality
-            initializeDeleteButtons();
-            initializeEditButtons();
-            })
-      .catch(error => console.error('Error fetching FAQs:', error));    
+
+        });
+
+        // Initialize delete button functionality
+        initializeDeleteButtons();
+        initializeEditButtons();
+      })
+      .catch(error => console.error('Error fetching FAQs:', error));
   }
 
 
@@ -1050,7 +1075,7 @@ const FAQModule = (function () {
   function deleteFAQ(faqId) {
     // Confirm deletion before proceeding
     const confirmDelete = confirm('Are you sure you want to delete this FAQ?');
-    
+
     if (!confirmDelete) {
       return; // If the user cancels, do nothing
     }
@@ -1059,20 +1084,20 @@ const FAQModule = (function () {
     fetch(`/FAQ/delete/${faqId}`, {
       method: 'DELETE',
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) {
-        alert(data.error);
-      } else {
-        alert('FAQ deleted successfully!');
-        // Remove the deleted FAQ from the DOM
-        document.getElementById(`category-name-${faqId}`).parentElement.remove();
-      }
-    })
-    .catch(error => console.error('Error:', error));
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert('FAQ deleted successfully!');
+          // Remove the deleted FAQ from the DOM
+          document.getElementById(`category-name-${faqId}`).parentElement.remove();
+        }
+      })
+      .catch(error => console.error('Error:', error));
   }
 
-  function showEditForm(id, question, answer){
+  function showEditForm(id, question, answer) {
     console.log("edit form ekata enawa");
     const modal = document.getElementById('editFAQModal');
     modal.style.display = 'block'; // Show the modal
@@ -1080,7 +1105,7 @@ const FAQModule = (function () {
     document.getElementById('editFAQQuestion').value = question;
     document.getElementById('editFAQAnswer').value = answer;
 
-    console.log("edit form ekata eddi id eka: ",question  )
+    console.log("edit form ekata eddi id eka: ", question)
 
     // Hide the Edit and Delete buttons
     const buttons = document.querySelectorAll('.editBtnFAQ, .deleteBtnFAQ');
@@ -1093,7 +1118,7 @@ const FAQModule = (function () {
     saveButton.onclick = function () {
       submitEditFAQ();
     };
-    
+
   }
 
   // Initialize delete buttons event listeners
@@ -1108,17 +1133,17 @@ const FAQModule = (function () {
     });
   }
 
-  function initializeEditButtons(){
+  function initializeEditButtons() {
     const editButtons = document.querySelectorAll('.editBtnFAQ');
     editButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const faqId = this.getAttribute('faq-id');
-      const que = this.getAttribute('que-id');
-      const ans = this.getAttribute('ans-id');
+      button.addEventListener('click', function () {
+        const faqId = this.getAttribute('faq-id');
+        const que = this.getAttribute('que-id');
+        const ans = this.getAttribute('ans-id');
 
-      console.log(faqId)
-      showEditForm(faqId,que,ans);
-    });
+        console.log(faqId)
+        showEditForm(faqId, que, ans);
+      });
     });
   }
 
@@ -1133,7 +1158,7 @@ const FAQModule = (function () {
   };
 })();
 
-const FAQUserModule = (function (){
+const FAQUserModule = (function () {
 
   //Display the FAQ list to the user
   function viewFAQListUser() {
@@ -1142,12 +1167,12 @@ const FAQUserModule = (function (){
       .then(data => {
         const faqContainer = document.getElementById('ViewFAQList');
         faqContainer.innerHTML = '';  // Clear the existing list
-  
+
         if (!data || !data.data || data.data.length === 0) {
           faqContainer.innerHTML = '<p>No FAQs available</p>';
           return;
         }
-  
+
         data.data.forEach(faq => {
           // Create a card element for each FAQ
           const card = document.createElement('div');
@@ -1158,7 +1183,7 @@ const FAQUserModule = (function (){
               <p>${faq.answer}</p>
             </div>
           `;
-  
+
           faqContainer.appendChild(card);
         });
       })
@@ -1170,4 +1195,6 @@ const FAQUserModule = (function (){
   return {
     viewFAQListUser
   };
+
+
 })();

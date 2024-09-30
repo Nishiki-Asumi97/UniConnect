@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser'); 
+const bodyParser = require('body-parser');
 const FAQRoutes = require('./routes/FAQRoutes');
 const FAQUserRoutes = require('./routes/FAQUserRoutes');
 
@@ -11,13 +11,13 @@ const connectDB = require('./db/db');
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json({limit: '1mb'}));
+app.use(bodyParser.json({ limit: '1mb' }));
 app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
 
 // Connect to DB
 connectDB();
 
-app.get('/', (req, res) => {
+app.get('/Events', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'eventManagement.html'));
 });
 
@@ -31,10 +31,10 @@ app.get('/FAQ/User', (req, res) => {
 
 // Routes
 const categoryRoutes = require('./routes/categoryRoutes');
-app.use('/', categoryRoutes);
+app.use('/Events', categoryRoutes);
 
 const eventRoutes = require('./routes/eventRoutes');
-app.use('/', eventRoutes);
+app.use('/Events', eventRoutes);
 
 //FAQ route=============================================
 app.use('/FAQ', FAQRoutes);

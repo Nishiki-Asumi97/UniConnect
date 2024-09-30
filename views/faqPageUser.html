@@ -1,56 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">  
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ User</title>
-    <!-- Materialize CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ User</title>
+  <!-- Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+  </script>
 </head>
 
 <body>
-    <nav>
-        <div class="nav-wrapper light-blue accent-4 nav">
-          <a href="#" class="brand-logo right">Profile</a>
-          <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li><a href="sass.html">Home</a></li>
-            <li><a href="/">Events</a></li>
-            <li><a href="/">Communities</a></li>
-            <li><a href="/FAQ/User">FAQ</a></li>
-            <li><a href="/FAQ">FAQ Admin</a></li>
-          </ul>
-        </div>
-    </nav>
+  <nav>
+    <div class="nav-wrapper light-blue accent-4 nav">
+      <a href="#" class="brand-logo right">Profile</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li><a href="sass.html">Home</a></li>
+        <li><a href="/Events">Events</a></li>
+        <li><a href="/">Communities</a></li>
+        <li><a href="/FAQ/User">FAQ</a></li>
+        <li><a href="/FAQ">FAQ Admin</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    <div class="faq-user-page container">
-      <div class="faq-user-page row">
-        <div class="faq-user-page col s12">
-          <div class="faq-user-page chat-container">
-            <div class="faq-user-page chat-messages">
-              <!-- Chat messages will go here -->
-              <div class="faq-user-page message">
-                <p><strong>John:</strong> Hello!</p>
-              </div>
-              <div class="faq-user-page message">
-                <p><strong>Jane:</strong> Hi there!</p>
-              </div>
+  <div class="faq-user-page container">
+    <div class="faq-user-page row">
+      <div class="faq-user-page col s12">
+        <div class="faq-user-page chat-container">
+          <div class="faq-user-page chat-messages">
+            <!-- Chat messages will go here -->
+            <div class="faq-user-page message">
+              <p><strong>John:</strong> Hello!</p>
             </div>
-            <div class="faq-user-page chat-input">
-              <input type="text" placeholder="Type your message">
-              <button class="faq-user-page btn waves-effect waves-light light-blue">Send</button>
+            <div class="faq-user-page message">
+              <p><strong>Jane:</strong> Hi there!</p>
             </div>
+          </div>
+          <div class="faq-user-page chat-input">
+            <input type="text" placeholder="Type your message">
+            <button class="faq-user-page btn waves-effect waves-light light-blue">Send</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
+  <!-- FAQ cards -->
+  <div>
+    <span class="faq-admin-page">
+      <h4>Frequently Asked Questions</h4>
+    </span>
+    <div id="ViewFAQList" class="faq-user-page faq-container-user"></div>
+  </div>
     <!-- FAQ cards -->
     <div>
       <span class="faq-admin-page"><h4>Frequently Asked Questions</h4></span>
@@ -60,7 +67,6 @@
         </div>
       </div>
     </div>
-    
 </body>
 
 </html>
