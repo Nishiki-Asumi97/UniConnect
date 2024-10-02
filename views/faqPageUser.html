@@ -31,9 +31,9 @@
 
   <div class="faq-user-page container">
     <span class="faq-admin-page"><h4>Post Question</h4></span>
-      <div class="faq-user-page chat-input">
+      <div class="faq-user-page chat-input" id="questionForm">
         <input type="text" placeholder="Type your question" id="questionInput">
-        <button class="faq-user-page btn waves-effect waves-light light-blue">Submit</button>
+        <a type="submit" class="faq-user-page btn waves-effect waves-light light-blue">Submit</a>
       </div>
       <div id="errorMessage" class="alert alert-danger mt-2" style="display:none;"></div>
         <div id="submittedQuestionContainer" class="mt-3" style="display:none;">
@@ -57,6 +57,31 @@
         </div>
       </div>
     </div>
+
+  <!-- Include socket.io client library -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+      // Connect to the FAQSocket
+      const socket = io('/FAQSocket');
+
+      // Listen for successful connection
+      socket.on('connect', () => {
+          console.log('Connected to the FAQ server via socket.io');
+
+          // Send a test event to the server
+          socket.emit('FAQSocketEvent', { message: 'Hello from FAQ' });
+      });
+
+      // Listen for response from the server
+      socket.on('FAQSocketResponse', (data) => {
+          console.log('Received from FAQ server:', data);
+      });
+
+      // Handle disconnect
+      socket.on('disconnect', () => {
+          console.log('Disconnected from FAQ server');
+      });
+  </script>
 </body>
 
 </html>
