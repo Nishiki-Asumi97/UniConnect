@@ -1,6 +1,9 @@
 import { expect } from "chai";
 import request from "request";
+import FAQ from '../models/FAQ.js';
+import sinon from "sinon";
 
+//FAQ Create - admin
 describe("POST /create", function () {
   const url = "http://localhost:3000/FAQ/create";
 
@@ -57,8 +60,6 @@ describe("POST /create", function () {
   });
 
   it("handles server errors and returns status 500", function (done) {
-    // Simulating a server error scenario (e.g., database connection issue)
-    // You can mock this in your actual server code for testing purposes
     request.post(
       url,
       {
@@ -76,3 +77,19 @@ describe("POST /create", function () {
     );
   });
 });
+
+// View FAQ - admin
+describe("GET /list", function () {
+    const url = "http://localhost:3000/FAQ/list";
+  
+    it("returns status 200 and retrieves the list of FAQs successfully", function (done) {
+      request.get(url, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);  // Check if the request was successful
+        const data = JSON.parse(body);  // Parse the response body
+        expect(data).to.have.property('data');  // Check that data property exists
+        expect(data.data).to.be.an('array');  // Ensure the data property is an array
+        done();
+      });
+    });
+});
+  
