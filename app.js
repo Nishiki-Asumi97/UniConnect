@@ -46,8 +46,8 @@ app.use('/FAQ', FAQRoutes);
 //FAQ User route=============================================
 app.use('/FAQ/User', FAQUserRoutes);
 
-// Socket.io setup (unique to yourself)
-const FAQSocket = io.of('/FAQSocket');  // Custom namespace
+// Socket.io setup for FAQ =================================
+const FAQSocket = io.of('/FAQSocket');  
 
 FAQSocket.on('connection', (socket) => {
     console.log('A user connected to FAQ Socket');
