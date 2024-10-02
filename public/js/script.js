@@ -1150,6 +1150,7 @@ const FAQModule = (function () {
   viewFAQList();
 
   return {
+    submitFAQ: submitFAQ,
     submitFAQ,
     viewFAQList,
     deleteFAQ,
@@ -1157,6 +1158,12 @@ const FAQModule = (function () {
     submitEditFAQ
   };
 })();
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+  module.exports = FAQModule;
+} else {
+  window.FAQModule = FAQModule;  // for browser environment
+}
 
 let postId = null;
 
