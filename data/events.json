@@ -1,0 +1,50 @@
+[
+    {
+        "title": "Tech Conference 2024",
+        "description": "Join us for a day full of talks from tech industry leaders.",
+        "image": "/img/Tech.jpeg",
+        "date": "2024-11-10",
+        "time": "09:00 AM to 05:00 PM",
+        "location": "Melbourne"
+    },
+    {
+        "title": "AI Workshop",
+        "description": "Learn the basics of AI with hands-on projects.",
+        "image": "/img/AI.jpeg",
+        "date": "2024-12-05",
+        "time": "10:00 AM to 04:00 PM",
+        "location": "Sydney"
+    },
+    {
+        "title": "Networking Gala",
+        "description": "An exclusive event to network with professionals in IT.",
+        "image": "/img/gala.jpg",
+        "date": "2024-12-20",
+        "time": "06:00 PM to 09:00 PM",
+        ",location": "Brisbane"
+    },
+    {
+        "title": "Tech Conference 2024",
+        "description": "Join us for a day full of talks from tech industry leaders.",
+        "image": "/img/Tech.jpeg",
+        "date": "2024-11-10",
+        "time": "09:00 AM to 05:00 PM",
+        "location": "Melbourne"
+    },
+    {
+        "title": "AI Workshop",
+        "description": "Learn the basics of AI with hands-on projects.",
+        "image": "/img/AI.jpeg",
+        "date": "2024-12-05",
+        "time": "10:00 AM to 04:00 PM",
+        "location": "Sydney"
+    },
+    {
+        "title": "Networking Gala",
+        "description": "An exclusive event to network with professionals in IT.",
+        "image": "/img/gala.jpg",
+        "date": "2024-12-20",
+        "time": "06:00 PM to 09:00 PM",
+        ",location": "Brisbane"
+    }
+]

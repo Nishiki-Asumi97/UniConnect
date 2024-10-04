@@ -1,19 +1,132 @@
-<html lang="en"></html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+    <!-- Existing head content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events Page</title>
+    <title>FAQ Home page - General User</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+
     <style>
         body {
             font-family: 'Nunito', sans-serif;
         }
+
+        .countdown {
+            font-size: 1.1rem;
+            color: #ff5722;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Owl carousel navigation buttons */
+        .owl-prev,
+        .owl-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .owl-prev {
+            left: 10px;
+        }
+
+        .owl-next {
+            right: 10px;
+        }
+
+        /* Adjust the height of the slider images */
+        .owl-carousel .item img {
+            height: 500px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        /* Clickable div for the slider */
+        .clickable-div {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background-color: #00bcd4;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .clickable-div:hover {
+            background-color: #0198a2;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+        }
     </style>
 </head>
-<body class="bg-white">
-    <header class="bg-white border-b-4 border-gray-200">
+
+<body class="bg-gray-100">
+
+    <header class="bg-white shadow-lg">
         <div class="container mx-auto flex justify-between items-center py-4 px-6">
             <nav class="flex space-x-6">
                 <a href="#" class="text-cyan-500 font-bold">Home</a>
@@ -21,62 +134,229 @@
                 <a href="#" class="text-gray-500">Communities</a>
                 <a href="#" class="text-gray-500">FAQ</a>
             </nav>
-            <a href="#" class="text-cyan-500 text-2xl"><i class="fas fa-user-circle"></i> Profile</a>
+            <div class="flex items-center space-x-4">
+                <a href="#" id="profile-link" class="text-cyan-500 text-2xl"><i class="fas fa-user-circle"></i> <span id="username">Profile</span></a>
+                <button id="logoutBtn" class="text-red-500 text-lg font-bold">Logout</button>
+            </div>
         </div>
     </header>
 
-    <main class="container mx-auto my-8 px-6">
-        <div class="flex justify-center mb-8">
-            <img src="https://placehold.co/850x300" alt="A group of people at an event booth with a university banner" class="rounded-xl w-full h-64 object-cover"/>
-        </div>
-        <div class="text-center mb-8">
-            <button class="bg-cyan-500 text-white py-2 px-4 rounded-full">Explore Events Around You</button>
+    <main class="container mx-auto my-8 px-6 relative">
+        <!-- jQuery Slider (Owl Carousel) -->
+        <div class="owl-carousel owl-theme mb-8 relative">
+            <!-- Slide 1 -->
+            <div class="item">
+                <img src="/img/DUSA.jpg" alt="Image 1" class="rounded-xl" />
+                <!-- Clickable div for the first slide -->
+                <div class="clickable-div" onclick="window.location.href='event1.html'">Explore Events around you</div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="item">
+                <img src="/img/community.jpeg" alt="Image 2" class="rounded-xl" />
+                <!-- Clickable div for the second slide -->
+                <div class="clickable-div" onclick="window.location.href='event2.html'">Check communities post</div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="item">
+                <img src="/img/FAQ.jpg" alt="Image 3" class="rounded-xl" />
+                <!-- Clickable div for the third slide -->
+                <div class="clickable-div" onclick="window.location.href='event3.html'">View FAQ</div>
+            </div>
         </div>
 
-        <section>
+        <!-- Upcoming Events Section -->
+        <section class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-center text-xl font-bold text-gray-700 mb-5">Upcoming Events</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white border rounded-lg overflow-hidden shadow-md">
-                    <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
-                        <div class="text-center">
-                            <p class="text-2xl font-bold">09 - 27</p>
-                            <p class="text-lg">SEP</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-1">NAIDOC 2024: The Fire Within exhibition</h3>
-                        <p class="text-sm text-gray-600 mb-2">Mon, 05:00 PM - Wed, 03:00 PM</p>
-                        <p class="text-sm text-gray-600 mb-4">Geelong Waterfront Campus</p>
-                    </div>
-                </div>
-                <div class="bg-white border rounded-lg overflow-hidden shadow-md">
-                    <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
-                        <div class="text-center">
-                            <p class="text-2xl font-bold">15</p>
-                            <p class="text-lg">JUL</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-1">Honours Thesis Writing Group - Faculty of Health</h3>
-                        <p class="text-sm text-gray-600 mb-2">Fri, 02:00 PM - 03:00 PM</p>
-                        <p class="text-sm text-gray-600 mb-4">Online</p>
-                    </div>
-                </div>
-                <div class="bg-white border rounded-lg overflow-hidden shadow-md">
-                    <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
-                        <div class="text-center">
-                            <p class="text-2xl font-bold">15 - 23</p>
-                            <p class="text-lg">JUL</p>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-1">Honours Thesis Writing Group - Faculty of Arts and Education</h3>
-                        <p class="text-sm text-gray-600 mb-2">Sat, 02:00 PM - 03:00 PM</p>
-                        <p class="text-sm text-gray-600 mb-4">Online</p>
-                    </div>
-                </div>
+
+            <!-- Container to load dynamic event cards -->
+            <div class="grid md:grid-cols-3 gap-6" id="event-cards-container">
+                <!-- Event cards will be dynamically loaded here -->
             </div>
         </section>
     </main>
+
+    <!-- Event Modal for expanding cards -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="" alt="Event Image" />
+            <h2 id="modalTitle" class="text-2xl font-bold my-4"></h2>
+            <p id="modalDescription"></p>
+            <p><strong>Date:</strong> <span id="modalDate"></span></p>
+            <p><strong>Time:</strong> <span id="modalTime"></span></p>
+            <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+        </div>
+    </div>
+
+    <!-- Profile Modal (existing one) -->
+    <div class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="profileModal">
+        <!-- Profile Modal content remains the same -->
+    </div>
+
+    <!-- Existing Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Owl Carousel with autoplay and manual navigation
+            var owl = $('.owl-carousel').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                autoplay: true,
+                autoplayTimeout: 2500,
+                autoplayHoverPause: true,
+                navText: [
+                    '<i class="fas fa-chevron-left"></i>', // Left arrow
+                    '<i class="fas fa-chevron-right"></i>' // Right arrow
+                ],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 1
+                    },
+                    1000: {
+                        items: 1
+                    }
+                }
+            });
+
+            // Change the button text based on the current active slide
+            owl.on('changed.owl.carousel', function (event) {
+                var itemIndex = event.item.index;
+
+                // Change the button text dynamically based on the active item
+                if (itemIndex === 0) {
+                    $('#slider-button').text('Explore Events Around You');
+                } else if (itemIndex === 1) {
+                    $('#slider-button').text('FAQ Page Details');
+                } else {
+                    $('#slider-button').text('Learn More');
+                }
+            });
+
+            // Display username in profile section
+            const username = localStorage.getItem('username') || 'Profile';
+            document.getElementById('username').textContent = username;
+
+            // Handle Logout Button
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                localStorage.removeItem('username'); // Remove stored username
+                window.location.href = '/login.html'; // Redirect to login page
+            });
+
+            // Modal variables
+            var eventModal = document.getElementById('eventModal');
+            var modalImage = document.getElementById('modalImage');
+            var modalTitle = document.getElementById('modalTitle');
+            var modalDescription = document.getElementById('modalDescription');
+            var modalDate = document.getElementById('modalDate');
+            var modalTime = document.getElementById('modalTime');
+            var modalLocation = document.getElementById('modalLocation');
+            var closeBtn = document.getElementsByClassName('close')[0];
+
+            // Fetch and load event cards dynamically
+            async function loadEventCards() {
+                try {
+                    const response = await fetch('/api/events');
+                    const events = await response.json();
+
+                    const container = document.getElementById('event-cards-container');
+                    container.innerHTML = ''; // Clear any existing content
+
+                    events.forEach(event => {
+                        const card = document.createElement('div');
+                        card.classList.add('bg-white', 'border', 'rounded-lg', 'overflow-hidden', 'shadow-md', 'cursor-pointer');
+
+                        // Format event date
+                        const eventDate = new Date(event.date);
+                        const formattedDate = `${eventDate.getDate()} ${eventDate.toLocaleString('default', { month: 'long' })}, ${eventDate.getFullYear()}`;
+
+                        // Countdown calculation
+                        const countdownId = `countdown-${eventDate.getTime()}`;
+
+                        card.innerHTML = `
+                            <img src="${event.image}" alt="${event.title}" class="w-full h-48 object-cover">
+                            <div class="bg-cyan-500 text-white p-4 flex justify-center items-center">
+                                <div class="text-center">
+                                    <p class="text-lg">${formattedDate}</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg mb-1">${event.title}</h3>
+                                <p class="text-sm text-gray-600 mb-2"><i class="fas fa-clock"></i> ${event.time}</p>
+                                <p class="text-sm text-gray-600 mb-2"><i class="fas fa-map-marker-alt"></i> ${event.location}</p>
+                                <div id="${countdownId}" class="countdown"></div>
+                            </div>
+                        `;
+
+                        // Handle card click to open modal
+                        card.addEventListener('click', () => {
+                            modalImage.src = event.image;
+                            modalTitle.innerText = event.title;
+                            modalDescription.innerText = event.description;
+                            modalDate.innerText = formattedDate;
+                            modalTime.innerText = event.time;
+                            modalLocation.innerText = event.location;
+
+                            eventModal.style.display = 'block';
+                        });
+
+                        container.appendChild(card);
+
+                        // Start countdown timer for each event
+                        startCountdown(eventDate, countdownId);
+                    });
+                } catch (error) {
+                    console.error('Error fetching event data:', error);
+                }
+            }
+
+            // Countdown timer function
+            function startCountdown(eventDate, countdownId) {
+                const countdownElement = document.getElementById(countdownId);
+
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const timeLeft = eventDate - now;
+
+                    if (timeLeft > 0) {
+                        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                        countdownElement.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    } else {
+                        countdownElement.innerHTML = 'The event is live!';
+                    }
+                }
+
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }
+
+            // Load event cards on page load
+            loadEventCards();
+
+            // Modal close button
+            closeBtn.onclick = function () {
+                eventModal.style.display = 'none';
+            }
+
+            // Close modal on outside click
+            window.onclick = function (event) {
+                if (event.target == eventModal) {
+                    eventModal.style.display = 'none';
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniConnect Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white font-['Roboto']">
+    <div class="flex h-screen">
+        <!-- Left Section -->
+        <div class="flex flex-col w-1/2 justify-center items-center px-16">
+            <div class="flex items-center mb-8">
+                <div class="bg-blue-500 rounded-full h-12 w-12 flex items-center justify-center text-white text-2xl font-bold">Uni</div>
+                <span class="ml-2 text-xl font-bold text-black">Connect</span>
+            </div>
+            <h1 class="text-4xl font-bold mb-4">Create Your <br> UniConnect Account</h1>
+            <form id="signupForm" class="w-full">
+                <div class="flex flex-col w-full mb-4">
+                    <input type="text" id="name" placeholder="Full Name" class="border border-gray-300 p-3 rounded-lg mb-4 w-full" required>
+                    <input type="email" id="email" placeholder="Email Address" class="border border-gray-300 p-3 rounded-lg mb-4 w-full" required>
+                    <input type="password" id="password" placeholder="Password" class="border border-gray-300 p-3 rounded-lg w-full" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg mb-4">Sign Up</button>
+            </form>
+            <div class="text-center text-gray-500 my-4">or</div>
+
+            <!-- Google Sign-Up Button -->
+            <button class="flex items-center justify-center bg-white border border-gray-300 py-3 rounded-lg w-full mb-3">
+                <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&response_type=code&scope=profile email" class="w-full text-center">
+                    <img src="/img/Google.png" alt="Google logo" class="w-5 h-5 mr-2 inline-block">
+                    Sign Up Using Google
+                </a>
+            </button>
+
+            <!-- Facebook Sign-Up Button -->
+            <button class="flex items-center justify-center bg-white border border-gray-300 py-3 rounded-lg w-full">
+                <a href="https://www.facebook.com/v4.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=YOUR_REDIRECT_URI&state={state-param}" class="w-full text-center">
+                    <img src="/img/fb.png" alt="Facebook logo" class="w-5 h-5 mr-2 inline-block">
+                    Sign Up Using Facebook
+                </a>
+            </button>
+            
+            <a href="login.html" class="link text-blue-500 mt-4">Already have an account? Log in</a>
+        </div>
+
+        <!-- Right Section -->
+        <div class="flex w-1/2 justify-center items-center" style="margin-top: -40px;">
+            <div class="text-center">
+                <img src="/img/a.jpg" height="300" width="300" alt="Owl cartoon with graduation cap" class="mx-auto mb-4">
+                <h2 class="text-3xl font-bold text-blue-500">UNICONNECT</h2>
+                <p class="text-gray-500">CONNECT WITH PEOPLE</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Make POST request to your backend to store the user data
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'User created successfully') {
+                    alert('Sign up successful!');
+                    window.location.href = 'login.html'; // Redirect to login after signup
+                } else {
+                    alert('Sign up failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during sign up.');
+            });
+        });
+    </script>
+</body>
+</html>
