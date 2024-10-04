@@ -18,7 +18,7 @@
 <body>
   <nav>
     <div class="nav-wrapper light-blue accent-4 nav">
-      <a href="#" class="brand-logo right">Profile</a>
+      <a href="#" class="brand-logo right">UniConnect</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li><a href="sass.html">Home</a></li>
         <li><a href="/Events">Events</a></li>
@@ -30,34 +30,24 @@
   </nav>
 
   <div class="faq-user-page container">
-    <div class="faq-user-page row">
-      <div class="faq-user-page col s12">
-        <div class="faq-user-page chat-container">
-          <div class="faq-user-page chat-messages">
-            <!-- Chat messages will go here -->
-            <div class="faq-user-page message">
-              <p><strong>John:</strong> Hello!</p>
-            </div>
-            <div class="faq-user-page message">
-              <p><strong>Jane:</strong> Hi there!</p>
-            </div>
-          </div>
-          <div class="faq-user-page chat-input">
-            <input type="text" placeholder="Type your message">
-            <button class="faq-user-page btn waves-effect waves-light light-blue">Send</button>
-          </div>
-        </div>
+    <span class="faq-admin-page"><h4>Post Question</h4></span>
+      <div class="faq-user-page chat-input" id="questionForm">
+        <input type="text" placeholder="Type your question" id="questionInput">
+        <a type="submit" class="faq-user-page btn waves-effect waves-light light-blue">Submit</a>
       </div>
-    </div>
+      <div id="errorMessage" class="alert alert-danger mt-2" style="display:none;"></div>
+        <div id="submittedQuestionContainer" class="mt-3" style="display:none;">
+            <h4>Your Question:</h4>
+            <p id="submittedQuestion"></p>
+        </div>
+
+        <span class="center"><h4>Answer</h4></span>
+        <div class="center-align">
+          <button id="refreshBtn" class="btn waves-effect waves-light grey">Refresh the answer</button>
+        </div>
+        <ul id="answerList" class="faq-user-page faq-container-user"></ul>
   </div>
 
-  <!-- FAQ cards -->
-  <div>
-    <span class="faq-admin-page">
-      <h4>Frequently Asked Questions</h4>
-    </span>
-    <div id="ViewFAQList" class="faq-user-page faq-container-user"></div>
-  </div>
     <!-- FAQ cards -->
     <div>
       <span class="faq-admin-page"><h4>Frequently Asked Questions</h4></span>
@@ -67,6 +57,31 @@
         </div>
       </div>
     </div>
+
+  <!-- Include socket.io client library -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+      // Connect to the FAQSocket
+      const socket = io('/FAQSocket');
+
+      // Listen for successful connection
+      socket.on('connect', () => {
+          console.log('Connected to the FAQ server via socket.io');
+
+          // Send a test event to the server
+          socket.emit('FAQSocketEvent', { message: 'Hello from FAQ' });
+      });
+
+      // Listen for response from the server
+      socket.on('FAQSocketResponse', (data) => {
+          console.log('Received from FAQ server:', data);
+      });
+
+      // Handle disconnect
+      socket.on('disconnect', () => {
+          console.log('Disconnected from FAQ server');
+      });
+  </script>
 </body>
 
 </html>

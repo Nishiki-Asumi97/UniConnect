@@ -1,5 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  FAQModule.submitFAQ();
+  FAQUserModule.viewFAQListUser();
+  FAQUserModule.facebookSubmitQuestion();
+  FAQModule.showEditForm();
+  FAQModule.closeModal();
+  FAQModule.submitEditFAQ();
+
   initMap();
   getEvents();
   getCategories();
@@ -857,13 +864,6 @@ async function initMapPlaceUpdate() {
 
 // FAQ module ==========================================================
 
-FAQModule.submitFAQ();
-
-FAQUserModule.viewFAQListUser();
-FAQModule.showEditForm();
-FAQModule.closeModal();
-FAQModule.submitEditFAQ();
-
 const FAQModule = (function () {
 
   //create FAQ
@@ -1150,6 +1150,7 @@ const FAQModule = (function () {
   viewFAQList();
 
   return {
+    submitFAQ: submitFAQ,
     submitFAQ,
     viewFAQList,
     deleteFAQ,
@@ -1157,6 +1158,14 @@ const FAQModule = (function () {
     submitEditFAQ
   };
 })();
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+  module.exports = FAQModule;
+} else {
+  window.FAQModule = FAQModule;  // for browser environment
+}
+
+let postId = null;
 
 const FAQUserModule = (function () {
 
@@ -1190,11 +1199,38 @@ const FAQUserModule = (function () {
       .catch(error => console.error('Error fetching FAQs:', error));
   }
 
+  function facebookSubmitQuestion() {
+    const question = document.getElementById('questionInput').value.trim();
+    if (!question) return;
+
+    fetch('https://graph.facebook.com/467268896461019/feed', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            message: question,
+            access_token: 'EAAMnYGt0qhcBO2CSsBSXJSPyprZCCuZBvhRF82yaSFKXhprWofLVctbaFFgoeX5QdTyxMnQgoKWSR4zsBMQAGr4sVoNRLXcSHHZBTmGyebgrlebMdZBGvDmRZCG5ZBYRcmbZCOMZCrKKl7LAiJ1LzUT0EVXwVNoA0mJJ3zEzg0p48Q2VvasVO8eJ8fWQawPIxaVZB'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.id) {
+            document.getElementById('questionInput').value = ''; 
+            document.getElementById('submittedQuestion').textContent = question;
+            document.getElementById('submittedQuestionContainer').style.display = 'block';
+            postId = data.id;
+        } else {
+            displayError('Failed to post to Facebook. Please try again.');
+        }
+    })
+    .catch(() => displayError('An error occurred. Please try again.'));
+  }
+
   viewFAQListUser();
+  facebookSubmitQuestion();
 
   return {
-    viewFAQListUser
+    viewFAQListUser,
+    facebookSubmitQuestion
   };
-
 
 })();

@@ -3,8 +3,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const FAQRoutes = require('./routes/FAQRoutes');
 const FAQUserRoutes = require('./routes/FAQUserRoutes');
+const http = require('http');
+const socketIO = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);  // Use HTTP server for socket.io
+const io = socketIO(server);  // Initialize socket.io with the server
 
 const connectDB = require('./db/db');
 
@@ -42,8 +46,26 @@ app.use('/FAQ', FAQRoutes);
 //FAQ User route=============================================
 app.use('/FAQ/User', FAQUserRoutes);
 
+// Socket.io setup for FAQ =================================
+const FAQSocket = io.of('/FAQSocket');  
+
+FAQSocket.on('connection', (socket) => {
+    console.log('A user connected to FAQ Socket');
+
+    // Handle socket events
+    socket.on('FAQSocketEvent', (data) => {
+        console.log('Received FAQSocket:', data);
+        // Emit an event back to the client
+        socket.emit('FAQSocketResponse', { message: 'Hello from the FAQ server!' });
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected from FAQ Socket');
+    });
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
